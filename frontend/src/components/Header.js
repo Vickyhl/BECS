@@ -17,7 +17,10 @@ const Header = (handleClick) => {
         <h1>Blood Bank</h1>
       </div>
       <li>
-        <a href="home">Home</a>
+        <a href="/home">Home</a>
+      </li>
+      <li>
+        <a href="/login">Login</a>
       </li>
       <li className="dropdown">
         <a href="" className="dropbtn">

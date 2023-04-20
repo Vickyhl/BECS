@@ -1,9 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { logEvent } from "./LoggingService";
 import "../components/modalCSS.css";
 
 const InRoutine = () => {
+  const userData = JSON.parse(localStorage.getItem("user"));
+  const firstName = userData?.firstName;
   const [errorMessage, setErrorMessage] = useState(null);
 
   const {
@@ -32,6 +35,40 @@ const InRoutine = () => {
     console.log(request.bloodType);
     await axios.post("http://localhost:5000/inRoutine", request).then((res) => {
       console.log(res.data.message);
+
+      logEvent({
+        timestamp: new Date(),
+        user: firstName,
+        action: "Blood request in routine",
+        bloodType: request.bloodType,
+        bloodAmount: request.bloodAmount,
+      });
+
+      if (
+        res.data.message ===
+        "There is not enogh blood that maches the request, try another amount"
+      ) {
+        logEvent({
+          timestamp: new Date(),
+          user: firstName,
+          action: "Blood request response(in routine)",
+          bloodType: request.bloodType,
+          bloodAmountRequested: request.bloodAmount,
+          response: "Insufficient amount of blood",
+          TransactionDescription: "There is no change in the blood database",
+        });
+      } else {
+        logEvent({
+          timestamp: new Date(),
+          user: firstName,
+          action: "Blood request response",
+          bloodType: request.bloodType,
+          bloodAmount: request.bloodAmount, //check if neccery
+          response: "Sufficient amount of blood",
+          TransactionDescription: `${request.bloodAmount} units of type ${request.bloodType} were removed from the database`,
+        });
+      }
+
       setErrorMessage(res.data.message);
     });
   };

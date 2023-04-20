@@ -1,9 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { logEvent } from "./LoggingService";
 import "../components/modalCSS.css";
 
 const MCI = () => {
+  const userData = JSON.parse(localStorage.getItem("user"));
+  const firstName = userData?.firstName;
   const [errorMessage, setErrorMessage] = useState(null);
 
   const {
@@ -30,6 +33,40 @@ const MCI = () => {
     const { bloodAmount } = request;
     console.log(request.bloodAmount);
     await axios.post("http://localhost:5000/MCI", request).then((res) => {
+      if (res.data.message === "There is a shortage of O- blood") {
+        logEvent({
+          timestamp: new Date(),
+          user: firstName,
+          action: "Blood request in MCI",
+          bloodType: "O-",
+          bloodAmount: request.bloodAmount,
+          response: "Insufficient amount of blood",
+          TransactionDescription: "There is no change in the blood database",
+        });
+      } else if (
+        res.data.message ===
+        `${bloodAmount} packets of type O- were produced at your request`
+      ) {
+        logEvent({
+          timestamp: new Date(),
+          user: firstName,
+          action: "Blood request in MCI",
+          bloodType: "O-",
+          bloodAmount: request.bloodAmount,
+          response: "Sufficient amount of blood",
+          TransactionDescription: `${request.bloodAmount} units of type O- were removed from the database`,
+        });
+      } else {
+        logEvent({
+          timestamp: new Date(),
+          user: firstName,
+          action: "Blood request in MCI",
+          bloodType: "O-",
+          bloodAmount: request.bloodAmount,
+          response: "A smaller amount of blood than requested",
+          TransactionDescription: `${request.bloodAmount} units of type O- were removed from the database`,
+        });
+      }
       console.log(res.data.message);
       setErrorMessage(res.data.message);
     });

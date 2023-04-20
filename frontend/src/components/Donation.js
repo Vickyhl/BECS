@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { logEvent } from "./LoggingService";
 import { useForm } from "react-hook-form";
 import "../components/Login.css";
 
 const Donation = () => {
   const navigate = useNavigate();
+  const userData = JSON.parse(localStorage.getItem("user"));
+  const firstName = userData?.firstName;
   const [errorMessage, setErrorMessage] = useState(null);
 
   const {
@@ -33,9 +36,22 @@ const Donation = () => {
   };
 
   const onSubmit = async () => {
-    console.log("Submitting form data:", user);
+    // console.log("Submitting form data:", user);
     try {
       const response = await axios.post("http://localhost:5000/donation", user);
+
+      logEvent({
+        timestamp: new Date(),
+        user: firstName,
+        action: "Blood donation",
+        bloodType: user.bloodType,
+        firsNameOfDonor: user.firstName,
+        lastNameOfDonor: user.lastName,
+        idOfDonor: user.id,
+        response: "The donation was successfully received!",
+        TransactionDescription: `One unit of type ${user.bloodType} were added to the database`,
+      });
+
       console.log("Response:", response);
       setErrorMessage(response.data.message);
     } catch (error) {

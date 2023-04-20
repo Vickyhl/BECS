@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import React from "react";
 import Home from "./Home";
+import Register from "./Register";
+import Login from "./Login";
 import InRoutine from "./InRoutine";
 import MCI from "./MCI";
 import HealthDec from "./HealthDec";
@@ -12,6 +14,8 @@ const Routes1 = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/inRoutine" element={<InRoutine />} />
       <Route path="/MCI" element={<MCI />} />
       <Route path="/donateBlood" element={<Donation />} />

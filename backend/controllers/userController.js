@@ -2,6 +2,7 @@ import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import HttpError from "../models/httpError.js";
 import User from "../models/userModel.js";
+import Admin from "../models/adminModel.js";
 import PasswordResetToken from "../models/passwordReset.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
@@ -21,13 +22,70 @@ export const getUsers = async (req, res, next) => {
   res.json({ users: users.map((user) => user.toObject({ getters: true })) });
 };
 
+export const signup = async (req, res, next) => {
+  console.log(req.body);
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new HttpError("Invalid inputs passed, please check your data.", 422)
+    );
+  }
+
+  const { firstName, lastName, email, password } = req.body;
+
+  let hashedPassword;
+  try {
+    hashedPassword = await bcrypt.hash(password, 12);
+  } catch (err) {
+    const error = new HttpError(
+      "Could not create user, please try again.",
+      500
+    );
+    return next(error);
+  }
+  const createdUser = new Admin({
+    firstName,
+    lastName,
+    email,
+    password: hashedPassword,
+  });
+
+  try {
+    console.log(createdUser);
+    await createdUser.save();
+  } catch (err) {
+    const error = new HttpError("Signing up failed, please try again.", 500);
+    return next(error);
+  }
+
+  let token;
+  try {
+    token = jwt.sign(
+      { userId: createdUser.id, email: createdUser.email },
+      "supersecret_dont_share",
+      { expiresIn: "1h" }
+    );
+  } catch (err) {
+    const error = new HttpError(
+      "Signing up failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  res
+    .status(201)
+    .json({ userId: createdUser.id, email: createdUser.email, token: token });
+};
+
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
   console.log("hey");
   let existingUser;
 
   try {
-    existingUser = await User.findOne({ email: email });
+    existingUser = await Admin.findOne({ email: email });
   } catch (err) {
     const error = new HttpError(
       "Logging in failed, please try again later.",

@@ -5,6 +5,8 @@ import HttpError from "./models/httpError.js";
 import cors from "cors";
 import Blood from "./models/bloodStock.js";
 import User from "./models/userModel.js";
+import userRoutes from "./routes/userRoutes.js";
+import auditTrailRoutes from "./routes/auditTrailRoutes.js";
 
 const app = express();
 app.use(cors());
@@ -352,6 +354,9 @@ app.post("/donation", async (req, res) => {
     message: "Congrats on the donation!",
   });
 });
+
+app.use("/api/users", userRoutes);
+app.use("/api/auditTrails", auditTrailRoutes);
 
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);

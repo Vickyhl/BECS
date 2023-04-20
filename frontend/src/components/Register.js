@@ -16,8 +16,8 @@ const Register = () => {
     lastName: "",
     email: "",
     password: "",
-    bloodType: "",
-    health: "",
+    // bloodType: "",
+    // health: "",
   });
 
   const handleChange = (e) => {
@@ -39,12 +39,10 @@ const Register = () => {
   };
 
   const onSubmit = async () => {
-    const { firstName, lastName, email, password, bloodType, health } = user;
-    console.log(user.bloodType);
+    const { firstName, lastName, email, password } = user;
     await axios
       .post("http://localhost:5000/api/users/signup", user)
       .then((res) => {
-        // alert(res.data.message);
         navigate("/login");
       });
   };
@@ -88,7 +86,7 @@ const Register = () => {
           onChange={handleChange}
         />
 
-        <label htmlFor="bloodType">Select your blood type:</label>
+        {/* <label htmlFor="bloodType">Select your blood type:</label>
         <select
           id="bloodType"
           {...register("bloodType", { required: "This field is required" })}
@@ -108,9 +106,9 @@ const Register = () => {
         </select>
         {errors?.bloodType?.message && (
           <div className="validationError">{errors?.bloodType?.message}</div>
-        )}
+        )} */}
 
-        <div className="form-check">
+        {/* <div className="form-check">
           <input
             type="checkbox"
             name="selectCheckbox"
@@ -123,7 +121,7 @@ const Register = () => {
             Health declaration
           </a>
           <div className="validationError">{errors?.health?.message}</div>
-        </div>
+        </div> */}
 
         <div className="btn-container">
           <button className="btn">Register</button>
