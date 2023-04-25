@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 
 app.get("/data", async (req, res) => {
   Blood.find({}).then(function (docs) {
-    console.log(docs);
+    // console.log(docs);
     res.send(docs);
   });
 });

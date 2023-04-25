@@ -45,6 +45,11 @@ const Header = (handleClick) => {
           Check blood status
         </a>
       </li>
+      <li>
+        <a href="/exportFiles" className="dropbtn">
+          Export files
+        </a>
+      </li>
     </ul>
   );
 };

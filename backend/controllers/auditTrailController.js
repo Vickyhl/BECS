@@ -14,3 +14,10 @@ export const saveAuditTrail = async (req, res) => {
     console.error("Failed to save audit trail:", error);
   }
 };
+
+export const auditExport = async (req, res) => {
+  Log.find({}).then(function (docs) {
+    console.log(docs);
+    res.send(docs);
+  });
+};

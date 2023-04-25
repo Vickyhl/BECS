@@ -8,6 +8,7 @@ import MCI from "./MCI";
 import HealthDec from "./HealthDec";
 import Donation from "./Donation";
 import BloodStatus from "./BloodStatus";
+import Export from "./Export";
 
 const Routes1 = () => {
   return (
@@ -20,6 +21,7 @@ const Routes1 = () => {
       <Route path="/MCI" element={<MCI />} />
       <Route path="/donateBlood" element={<Donation />} />
       <Route path="/bloodStatus" element={<BloodStatus />} />
+      <Route path="/exportFiles" element={<Export />} />
       <Route path="/HealthDec" element={<HealthDec />} />
     </Routes>
   );
