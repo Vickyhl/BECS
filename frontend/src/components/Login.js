@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { logEvent } from "./LoggingService";
 import template from "./images/template.jpg";
 import "../components/Login.css";
 
 export const Login = () => {
-  let userData = localStorage.getItem("user");
   const [errorMessage, setErrorMessage] = useState(null);
   const [user, setUser] = useState({
     email: "",
@@ -27,7 +27,15 @@ export const Login = () => {
       .post("http://localhost:5000/api/users/login", user)
       .then((res) => {
         console.log(res.data.existingUser);
+        console.log(res.data.existingUser.firstName);
         if (res.data.existingUser) {
+          logEvent({
+            timestamp: new Date(),
+            user: res.data.existingUser.firstName,
+            action: "System login",
+            response: "Login successfully!",
+            TransactionDescription: "Successful system login",
+          });
           window.location.assign("http://localhost:3000/home");
           localStorage.setItem("user", JSON.stringify(res.data.existingUser));
         } else {
