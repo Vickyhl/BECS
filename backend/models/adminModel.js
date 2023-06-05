@@ -30,8 +30,18 @@ const adminSchema = mongoose.Schema(
     },
     isAdmin: {
       type: Boolean,
-      required: false,
+      required: true,
       default: false,
+    },
+    user: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
+    student: {
+      type: Boolean,
+      default: false,
+      required: true,
     },
   },
   {

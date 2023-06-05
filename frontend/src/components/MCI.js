@@ -42,6 +42,9 @@ const MCI = () => {
           bloodAmount: request.bloodAmount,
           response: "Insufficient amount of blood",
           TransactionDescription: "There is no change in the blood database",
+          firsNameOfDonor: null,
+          lastNameOfDonor: null,
+          idOfDonor: null,
         });
       } else if (
         res.data.message ===
@@ -55,6 +58,9 @@ const MCI = () => {
           bloodAmount: request.bloodAmount,
           response: "Sufficient amount of blood",
           TransactionDescription: `${request.bloodAmount} units of type O- were removed from the database`,
+          firsNameOfDonor: null,
+          lastNameOfDonor: null,
+          idOfDonor: null,
         });
       } else {
         logEvent({
@@ -65,6 +71,9 @@ const MCI = () => {
           bloodAmount: request.bloodAmount,
           response: "A smaller amount of blood than requested",
           TransactionDescription: `${request.bloodAmount} units of type O- were removed from the database`,
+          firsNameOfDonor: null,
+          lastNameOfDonor: null,
+          idOfDonor: null,
         });
       }
       console.log(res.data.message);

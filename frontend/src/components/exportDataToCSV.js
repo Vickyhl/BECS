@@ -1,5 +1,3 @@
-import React from "react";
-
 const convertToCSV = (data) => {
   const header = Object.keys(data[0]).join(",");
   const rows = data.map((row) => Object.values(row).join(",")).join("\n");

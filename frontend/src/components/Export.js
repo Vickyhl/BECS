@@ -8,21 +8,36 @@ import template from "./images/template.jpg";
 function Export() {
   const userData = JSON.parse(localStorage.getItem("user"));
   const firstName = userData?.firstName;
+  const isAdmin = userData?.isAdmin;
+  const isStudent = userData?.student;
   const [auditData, setAuditData] = useState([]);
   const [data, setData] = useState([]);
 
   const handleAudit = async () => {
-    const response = await axios.get(
-      "http://localhost:5000/api/auditTrails/auditExport"
-    );
+    let response;
+    if (isAdmin) {
+      response = await axios.get(
+        "http://localhost:5000/api/auditTrails/auditExport"
+      );
+    } else if (isStudent) {
+      response = await axios.get(
+        "http://localhost:5000/api/auditTrails/studentAuditExport"
+      );
+    }
+
     setAuditData(response.data);
     if (response.data) {
       logEvent({
         timestamp: new Date(),
         user: firstName,
         action: "Export of audit trails",
+        bloodType: null,
+        bloodAmount: null,
         response: "Export successfully!",
         TransactionDescription: "Successful exported audit trails",
+        firsNameOfDonor: null,
+        lastNameOfDonor: null,
+        idOfDonor: null,
       });
       exportDataToCSV(response.data);
     }
@@ -47,9 +62,11 @@ function Export() {
     <div>
       <img className="img-fluid" src={template} alt="homeImg" />
       <h1 className="export"> Choose a data to export:</h1>
-      <div className="btn-container-export" onClick={handleAudit}>
-        <button className="btn">Audit trail data</button>
-      </div>
+      {(isAdmin || isStudent) && (
+        <div className="btn-container-export" onClick={handleAudit}>
+          <button className="btn">Audit trail data</button>
+        </div>
+      )}
       <div className="btn-container-export" onClick={handleData}>
         <button className="btn">Blood inventory data</button>
       </div>

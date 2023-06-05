@@ -42,6 +42,11 @@ const InRoutine = () => {
         action: "Blood request in routine",
         bloodType: request.bloodType,
         bloodAmount: request.bloodAmount,
+        response: null,
+        TransactionDescription: null,
+        firsNameOfDonor: null,
+        lastNameOfDonor: null,
+        idOfDonor: null,
       });
 
       if (
@@ -53,9 +58,12 @@ const InRoutine = () => {
           user: firstName,
           action: "Blood request response(in routine)",
           bloodType: request.bloodType,
-          bloodAmountRequested: request.bloodAmount,
+          bloodAmount: request.bloodAmount,
           response: "Insufficient amount of blood",
           TransactionDescription: "There is no change in the blood database",
+          firsNameOfDonor: null,
+          lastNameOfDonor: null,
+          idOfDonor: null,
         });
       } else {
         logEvent({
@@ -66,6 +74,9 @@ const InRoutine = () => {
           bloodAmount: request.bloodAmount, //check if neccery
           response: "Sufficient amount of blood",
           TransactionDescription: `${request.bloodAmount} units of type ${request.bloodType} were removed from the database`,
+          firsNameOfDonor: null,
+          lastNameOfDonor: null,
+          idOfDonor: null,
         });
       }
 

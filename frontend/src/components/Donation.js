@@ -45,11 +45,12 @@ const Donation = () => {
         user: firstName,
         action: "Blood donation",
         bloodType: user.bloodType,
+        bloodAmount: 1,
+        response: "The donation was successfully received!",
+        TransactionDescription: `One unit of type ${user.bloodType} were added to the database`,
         firsNameOfDonor: user.firstName,
         lastNameOfDonor: user.lastName,
         idOfDonor: user.id,
-        response: "The donation was successfully received!",
-        TransactionDescription: `One unit of type ${user.bloodType} were added to the database`,
       });
 
       console.log("Response:", response);
